@@ -1,0 +1,379 @@
+---
+title: "Homework3"
+author: "Ruoyu_Jia & Xi_Chen"
+date: "2/24/2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##1
+$$
+\phi(y_i-x_i^{\top}\beta_j;0,\delta^2)=\frac{1}{\sqrt{2\pi}~\delta}e^{-\frac{(y_i-x_i^{\top}\beta_j)^2}{2\delta^2}}
+$$
+$$
+\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}\{\log\pi_i+\log\phi(y_i-x_i^{\top}\beta_i;0,\delta^2)\}=\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}\{\log(\frac{1}{\sqrt{2\pi}~\delta}e^{-\frac{(y_i-x_i^{\top}\beta_j)^2}{2\delta^2}})\}  
+$$
+$$=\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}\log(\frac{1}{\sqrt{2\pi}}\pi_j)-\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}\log(\delta^2)-\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}\frac{(y_i-x_i^{\top}\beta_j)^2}{\delta^2}=I_1-\frac{1}{2}I_2-\frac{1}{2}I_3
+$$
+Firstly, only $I_3$ contains $\beta_j~, j = 1,...m$.~ We only need $\beta_j$ to minimize each $I_{ij}$
+$$
+I_{ij}=\sum_{i=1}^np_{ij}^{k+1}~\frac{(y_i-x_i^{\top}\beta_i)^2}{\delta^2}
+$$
+$$
+\frac{\partial I_{ij}}{\partial \beta_j}=-\frac{2\sum_{i=1}^np_{ij}^{k+1}x_i(y_i-x_i^\top\beta_j)}{\delta^2}=0
+$$
+$$
+\sum_{i=1}^np_{ij}^{k+1}x_ix_i^{\top}\beta_j=\sum_{i=1}^np_{ij}^{k+1}x_iyi
+$$
+$$
+\beta_j=(\sum_{i=1}^nx_ix_i^{\top}p_{ij}^{k+1})^{-1}(\sum_{i=1}^nx_ip_{ij}^{k+1}y_i)
+$$
+
+
+Next, only $I_2$ and $I_3$ contains $\delta^2$, we need $\delta^2$ to minimize $(I_2+I_3)$
+$$
+\frac{\partial (I_2+I_3)}{\partial( \delta^2)}=\frac{\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}}{\delta^2}-\frac{\sum_{i=1}^n\sum_{j=1}^m(y_i-x_i^{\top}\beta_j)^2}{\delta^4}=0
+$$
+$$
+\delta^2=\frac{\sum_{i=1}^n\sum_{j=1}^m(y_i-x_i^{\top}\beta_j)^2}{\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}}=\frac{\sum_{i=1}^n\sum_{j=1}^m(y_i-x_i^{\top}\beta_j)^2}{n}
+$$
+Lastly, only $I_1$ contains $\pi_j$
+$$
+I_1=-\frac{1}{2}\log(2\pi)~\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}
+$$
+So we need to minimize $\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}$. Note that $\pi_1+\pi_2+...+\pi_m=1$,
+$$
+L=\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}-\lambda(\sum_{j=1}^m\pi_j-1)
+$$
+$\lambda$ is a Lagrange multipter,
+$$
+\pi_j=\frac{\sum_{i=1}^np_{ij}^{k+1}}{\sum_{i=1}^n\sum_{j=1}^mp_{ij}^{k+1}}=\frac{\sum_{i=1}^np_{ij}^{k+1}}{n}
+$$
+
+##2(a)
+$$
+\int_0^\infty2X^{\theta-1}e^{-x}~dx=2\Gamma(\theta)\int_0^\infty\frac{X^{\theta-1}e^{-x}}{\Gamma(\theta)}~dx=2\Gamma(\theta)Gamma(\theta,1)
+$$
+$$
+\int_0^\infty X^{\theta-1/2}~e^{-x}~dx=\int_0^\infty X^{(\theta+1/2)^{-1}}~e^{-x}~dx=\Gamma(\theta+1/2)\int_0^\infty\frac{X^{\theta-1}e^{-x}}{\Gamma(\theta+1/2)}~dx=\Gamma(\theta+1/2)Gamma(\theta+1/2,1)
+$$
+$$
+C\int_0^\infty (2X^{\theta-1}~X^{\theta-1/2})~e^{-x}~dx=C(2\Gamma(\theta)Gamma(\theta,1)+\Gamma(\theta+1/2)Gamma(\theta+1/2,1))=1
+$$
+$$
+C=\frac{1}{2\Gamma(\theta)Gamma(\theta,1)+\Gamma(\theta+1/2)Gamma(\theta+1/2,1)}
+$$
+$$
+g(x)=\frac{(2X^{\theta-1}~X^{\theta-1/2})e^{-x}}{2\Gamma(\theta)Gamma(\theta,1)+\Gamma(\theta+1/2)Gamma(\theta+1/2,1)}
+$$
+$$
+=2C\Gamma(\theta)\frac{X^{\theta-1}e^{-x}}{\Gamma(\theta)}+C\Gamma(\theta+1/2)\frac{X^{\theta-1/2}e^{-x}}{\Gamma(\theta+1/2)}
+$$
+$$
+=2C\Gamma(\theta)g_1(x)+C\Gamma(\theta+1/2)g_2(x)
+$$
+Therefore, g is a mixture of Gamma distributions, which are $Gamma(\theta,1)$ and $Gamma(\theta+1/2,1)$. the weights of them are $\frac{2\Gamma(\theta)}{2\Gamma(\theta)+\Gamma(\theta+1/2)}$ and $\frac{2\Gamma(\theta+1/2)}{2\Gamma(\theta)+\Gamma(\theta+1/2)}$
+
+##2(b)
+
+### step 1
+
+sample k from {1,2} 
+
+the prob of k=1 is $2*\Gamma(\theta)*C$
+
+the prob of k=2 is $\Gamma(\theta+1/2)*C$
+
+
+### step 2
+
+if k=1, get 1 sample from $Gamma(1,\theta)$ 
+
+if k=2, get 1 sample from $Gamma(1,\theta+1/2)$
+
+
+### step 3
+
+repeat step1 and step2 10000 times 
+\newpage
+
+```{r ,echo=FALSE}
+
+g.sample <- function(theta,n){
+  sample = rep(0, n)
+  for (i in 1:n){
+    a = sample(1:2,1,prob = c(2*gamma(theta),gamma(theta+1/2)))
+    if (a==1){
+      x = rgamma(1,theta)
+      sample[i] = x
+    } else {
+      x = rgamma(1,theta+1/2)
+      sample[i] = x
+    }
+  }
+  return(sample)
+}
+
+sample = g.sample(5,10000)
+theta = 5 
+
+#plot
+intvl=c(.1, 15)
+n.p=10001
+dg.obj = density(sample, from=intvl[1], to=intvl[2], n=n.p)
+x = dg.obj$x
+dg = dg.obj$y
+g.val = 2*x^(theta-1)*exp(-x)+x^(theta-1/2)*exp(-x)
+g <- function(x) {2*x^(theta-1)*exp(-x)+x^(theta-1/2)*exp(-x)}
+c <- integrate(g, lower = 0, upper = Inf)$value
+g.val = g.val/c
+title1 <- paste("theta=",theta)
+plot(ts(cbind(dg,g.val),start=intvl[1],
+     deltat=diff(intvl)/(n.p-1)), main = c(title1),
+     plot.type="single", col=c("blue", "red"),
+     ylab="density", xlab="x")
+legend("topright",legend=c('sample','g'),col=c('blue','red'),
+       lty=1)
+
+```
+
+## 2(c)
+$f(x)=\alpha g(x)$, $f(x)/g(x)=\alpha=\frac{\sqrt{4+x}~x^{\theta-1}e^{-x}}{(2x^{\theta-1}+x^{\theta-1/2})e^{-x}}$ = $\frac{\sqrt{4+x}}{2+\sqrt x}$ = $F(x)$
+
+$$
+Let~~F'(x)=0
+$$
+Then we have $x=4$. Therefore, $\alpha=\sqrt2/2$ and accepting probability is $\frac{\sqrt{4+x}}{\sqrt 2/2(2+\sqrt x)}$
+
+### step 1
+get 1 sample from function g 
+
+### step 2
+u ~ unif(0,1) 
+
+if u < $f(x)/\alpha g(x)$ 
+
+accept it, go to step3 
+
+otherwise, reject it, return step1 
+
+### step 3
+<br>
+repeat step1 and step2 10000 times 
+<br>
+
+```{r ,echo=FALSE}
+f.sample <- function(theta, n=10000) {
+  sample = rep(0, n)
+  for (i in 1:n) {
+    while (1) {
+      x = g.sample(theta,1)
+      if ((sqrt(2)/2)*(2+sqrt(x))*runif(1) < sqrt(4+x)) {
+        sample[i] = x
+        break
+      }
+    }
+  }
+  
+  #plot
+  intvl=c(.1, 15)
+  n.p=10001
+  df.obj = density(sample, from=intvl[1], to=intvl[2], n=n.p)
+  x = df.obj$x
+  df = df.obj$y
+  f.val = sqrt(4+x)*x^(theta-1)*exp(-1*x)
+  f <- function(x) {sqrt(4+x)*x^(theta-1)*exp(-1*x)}
+  c <- integrate(f, lower = 0, upper = Inf)$value
+  f.val = f.val/c
+  title1 <- paste("theta=",theta)
+  plot(ts(cbind(df,f.val),start=intvl[1],
+       deltat=diff(intvl)/(n.p-1)),main = c(title1),
+       plot.type="single", col=c("blue", "red"),
+       ylab="density", xlab="x")
+  legend("topright",legend=c('sample','f'),col=c('blue','red'),
+         lty=1)
+
+  return(sample)
+}
+
+sample = f.sample(5)
+
+```
+
+
+##3(a)
+Let $g(x)=(1-\lambda)\theta x^{\theta-1}+\lambda\beta(1-x)^{\beta-1}=(1-\lambda)g_\theta(x)+\lambda g_\beta(x), ~0<\lambda<1$. Here $(1-\lambda)~and~\lambda$ can be considered as the weight of $g_\theta~and~g_\beta$.
+$$
+\alpha=\sup(\frac{\frac{x^{\theta-1}}{1+x^2}+\sqrt{2+x^2}(1-x)^{\beta-1}}{(1-\lambda)\theta x^{\theta-1}+\lambda \beta(1-x)^{\beta-1}})
+$$
+As the expression of $\alpha$ is complicated, we can use scaling method to estimate the value of $\alpha$, which is
+$$
+\alpha\leq \sup(\frac{\frac{1}{1+x^2}+\sqrt{2+x^2}(1-x)^{\beta-1}x^{1-\theta}}{\lambda \beta(1-x)^{\beta-1}x^{1-\theta}})
+$$
+$$
+=\sup(\frac{\frac{1}{1+x^2}}{\lambda \beta(1-x)^{\beta-1}x^{1-\theta}}+\frac{\sqrt{2+x^2}}{\lambda \beta})
+$$
+$$
+=\frac{1}{\lambda\beta}\sup(\frac{(1-x)^{1-\beta}x^{\theta-1}}{1+x^2}+\sqrt{2+x^2})
+$$
+$$
+\leq \frac{1}{\lambda\beta}\sup((1-x)^{1-\beta}x^{\theta-1}+\sqrt{2+x^2})
+$$
+$$
+=\frac{\sqrt3}{\lambda\beta}
+$$
+Therefore, the accepting probability is $\frac{\frac{x^{\theta-1}}{1+x^2}+\sqrt{2+x^2}(1-x)^{\beta-1}}{\frac{\sqrt3}{\lambda\beta}((1-\lambda)\theta x^{\theta-1}+\lambda \beta(1-x)^{\beta-1})}$
+
+### step 1
+get 1 sample from function g 
+
+### step 2
+
+u ~ unif(0,1) 
+
+if u < $f(x)/\alpha g(x)$ 
+
+accept it, go to step3 
+
+otherwise, reject it, return step1 
+
+### step 3
+repeat step1 and step2 10000 times 
+
+
+```{r ,echo=FALSE}
+f.sample <- function(theta,b, n=10000) {
+  sample = rep(0, n)
+  lambda = 0.6
+  for (i in 1:n) {
+    while(1){
+      if (runif(1)>lambda){
+        x = runif(1)^(1/theta)
+      } else {
+        x = 1-runif(1)^(1/b)
+      }
+      if (runif(1)*sqrt(3)/(lambda*b)*((1-lambda)*theta*x^(theta-1           )+lambda*b*(1-x)^(b-1))<x^(theta-1)/(1+x^2)+sqrt(2+x^2)*           (1-x)^(b-1)){
+        sample[i] = x
+        break
+      }
+    }
+  }
+  
+  #plot
+  intvl=c(0.05, 0.95)
+  n.p=501
+  df.obj = density(sample, from=intvl[1], to=intvl[2], n=n.p)
+  x = df.obj$x
+  df = df.obj$y
+  f.val = x^(theta-1)/(1+x^2)+sqrt(2+x^2)*(1-x)^(b-1)
+  f <- function(x) {x^(theta-1)/(1+x^2)+sqrt(2+x^2)*(1-x)^(b-1)}
+  c <- integrate(f, lower = 0, upper = 1)$value
+  f.val = f.val*mean(df)/c
+  title1 <- paste("theta=",theta)
+  title2 <- paste("beta=",b)
+  plot(ts(cbind(df, f.val), start=intvl[1],                              deltat=diff(intvl)/(n.p-1)), main = c(title1, title2),
+       plot.type="single", col=c("blue", "red"),
+       ylab="density", xlab="x")
+  legend("topright",legend=c('sample','f'),col=c('blue','red'),
+         lty=1)
+  
+  return(sample)
+}
+
+sample1 = f.sample(5,5)
+sample2 = f.sample(5,10)
+```
+
+##3(b)
+$$
+f(x)\propto  \frac{x^{\theta-1}}{1+x^2}+\sqrt{2+x^2}(1-x)^{\beta-1}=q_1(x)+q_2(x), 0<x<1
+$$
+
+$$
+q_1(x)=\frac{x^{\theta-1}}{1+x^2}\leq\alpha_1g_1(x)=\alpha\frac{x^{\theta-1}}{B(\theta,1)}
+$$
+$$
+\alpha=\sup(\frac{B(\theta,1)}{1+x^2})=B(\theta,1)
+$$
+So the accepting probability is $\frac{1}{1+x^2}$
+$$
+q_2(x)=\sqrt{2+x^2}~(1-x)^{\beta-1}\leq \alpha_2g_2(x)=\alpha_2\frac{(1-x)^{\beta-1}}{B(1,\beta)}
+$$
+$$
+\alpha_2=\sup(B(1,\beta)\sqrt{2+x^2})=\sqrt3 B(1,\beta)
+$$
+So the accepting probability is $\frac{\sqrt{2+x^2}}{\sqrt3}$
+
+### step 1    
+sample k from {1,2} with probabilities $p_k \propto \alpha_k$ 
+
+### step 2    
+get 1 sample from $g_k(x)$    
+<br>
+u ~ unif(0,1) 
+<br>
+if u < $f_k(x)/\alpha g_k(x)$    
+<br>
+accept it    
+<br>
+otherwise, reject it, repeat step2 until 1 sample is accepted 
+
+### step 3    
+repeat step1 and step2 10000 times    
+
+
+```{r ,echo=FALSE}
+f.separate <- function(theta,b, n=10000) {
+  sample = rep(0, n)
+  for (i in 1:n) {
+    a = sample(1:2,1,prob = c(beta(theta,1),sqrt(3)*beta(1,b)))
+    if (a==1){
+      while (1) {
+        x = rbeta(1,theta,1)
+        if ((1+x^2)*runif(1)<1) {
+          sample[i] = x
+          break
+        } 
+      }
+    } else {
+      while (1) {
+        x = rbeta(1,1,b)
+        if (sqrt(3)*runif(1)<sqrt(2+x^2)) {
+          sample[i] = x
+          break
+        } 
+      }
+    }
+  }
+  
+  #plot
+  intvl=c(0.05, 0.95)
+  n.p=10001
+  df.obj = density(sample, from=intvl[1], to=intvl[2], n=n.p)
+  x = df.obj$x
+  df = df.obj$y
+  f.val = x^(theta-1)/(1+x^2)+sqrt(2+x^2)*(1-x)^(b-1)
+  f <- function(x) {x^(theta-1)/(1+x^2)+sqrt(2+x^2)*(1-x)^(b-1)}
+  c <- integrate(f, lower = 0, upper = 1)$value
+  f.val = f.val/c
+  title1 <- paste("theta=",theta)
+  title2 <- paste("beta=",b)
+  plot(ts(cbind(df, f.val), start=intvl[1],                              deltat=diff(intvl)/(n.p-1)), main = c(title1, title2),
+       plot.type="single", col=c("blue", "red"),
+       ylab="density", xlab="x")
+  legend("topright",legend=c('sample','f'),col=c('blue','red'),
+         lty=1)
+  
+  return(sample)
+}
+
+sample3 = f.separate(5,5)
+sample4 = f.separate(5,10)
+
+```
+
